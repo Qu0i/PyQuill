@@ -4,9 +4,9 @@
 
 ## Features
 
-- [x] Caesar cipher — encrypt / decrypt
-
-
+- [x] Caesar cipher
+- [x] Atbash cipher
+ 
 ## Installation
 
 ```bash
@@ -18,13 +18,22 @@ cd PyQuill
 ## Usage
 
 ```bash
-# Encrypt
-python main.py caesar encrypt "Hello, World!" --shift 3
-# Khoor, Zruog!
+# Caesar encrypt
 
-# Decrypt
-python main.py caesar decrypt "Khoor, Zruog!" --shift 3
-# Hello, World!
+python main.py caesar encrypt "Hello, World!" --shift 3 # -> Khoor, Zruog!
+
+# Caesar decrypt
+
+python main.py caesar decrypt "Khoor, Zruog!" --shift 3 # -> Hello, World!
+
+
+# Atbash
+
+python main.py atbash transform "Hello!" # -> Svool!
+
+# Substitution cipher
+
+python main.py substitution transform "Hello" --source-alphabet ABCDEFGHIJKLMNOPQRSTUVWXYZ --target-alphabet MNBVCXZLKJHGFDSAPOIUYTREWQ # -> Lcggs
 ```
 
 ### Subcommands
@@ -33,42 +42,52 @@ python main.py caesar decrypt "Khoor, Zruog!" --shift 3
 |---------|-------------|
 | `caesar encrypt <text> --shift N` | Encrypt text with shift N |
 | `caesar decrypt <text> --shift N` | Decrypt text with shift N |
+| `atbash transform <text>` | Transform text using Atbash cipher |
+| `substitution transform <text> --source-alphabet ... --target-alphabet ...` | Custom substitution cipher |
 
-Shift is a required `--shift` flag. Negative values and values larger than 26
+`--shift` is required only for Caesar cipher. Negative values and values larger than 26
 wrap around correctly via modular arithmetic.
+
+Different ciphers may use different actions depending on their algorithm type.
 
 ## Tests
 
 ```bash
 python -m pytest -q
 # ..
-# 2 passed in 0.00s
+# 3 passed in 0.00s
 ```
 
 ## Project structure
 
 ```
 PyQuill/
-├── main.py                # Entry point, subcommand parsing
-├── ciphers/               # Cipher logic
-│   ├── __init__.py
-│   └── caesar.py          # encrypt() / decrypt()
-├── commands/              # CLI command handlers
-│   ├── __init__.py
-│   └── caesar.py          # encrypt_command / decrypt_command
-├── tests/                 # Pytest tests
-│   ├── __init__.py
-│   └── test_caesar.py     # 2 tests (caesar encrypt + decrypt)
-└── README.md
+├── ciphers
+│   ├── __init__.py
+│   ├── caesar.py
+│   └── substitution.py
+├── commands
+│   ├── __init__.py
+│   ├── atbash.py
+│   ├── caesar.py
+│   └── substitution.py
+├── main.py
+├── tests
+│   ├── __init__.py
+│   ├── test_caesar.py
+│   └── test_substitution.py
+└── utility
+    └── mapping.py
 ```
 
 ## TODO
 
 ### v 0.2
-- [ ] Atbash cipher
-- [ ] Vigenère cipher
+- [x] Atbash cipher
+- [x] Substitution cipher
 
 ### v 0.3
+- [ ] Vigenère cipher
 - [ ] File support
 
 ## License
